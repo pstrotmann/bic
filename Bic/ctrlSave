@@ -1,0 +1,19 @@
+package org.strotmann.bic
+import grails.rest.*
+import org.codehaus.groovy.grails.web.json.JSONObject
+
+class BankIdentCodeController extends RestfulController {
+	
+	static responseFormats = ['json', 'xml']
+	BankIdentCodeController() {
+		super(BankIdentCode)
+	}
+	//localhost:8080/bankIdentCode/bic?bic=333
+	def bic(){
+		def entry = params.find{ k, v -> Bic.metaClass.hasMetaProperty k }
+		if( entry )
+		  render( Bic.withCriteria( uniqueResult:true ){ eq entry.key, entry.value } as JSONObject )
+		else
+		  render text:'not found!'
+	  }
+}
